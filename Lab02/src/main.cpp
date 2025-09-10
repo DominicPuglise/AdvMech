@@ -8,7 +8,7 @@ void setup() {
   pinMode(9, OUTPUT);
   pinMode(A0, INPUT);  
 }
-
+ 
 
 void loop() {
   int currentReading = analogRead(A0)/10;
