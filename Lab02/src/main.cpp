@@ -1,18 +1,19 @@
 #include <Arduino.h>
 
-// put function declarations here:
-int myFunction(int, int);
+int x = 0;  
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  Serial.begin(115200);
+  Serial.println("starting...");
+  pinMode(9, OUTPUT);
+  pinMode(A0, INPUT);  
 }
+
 
 void loop() {
-  // put your main code here, to run repeatedly:
-}
-
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+  int currentReading = analogRead(A0)/10;
+  int x = 255-currentReading;
+  analogWrite(9, x);
+  delay(10);
+  Serial.println(currentReading);
 }
