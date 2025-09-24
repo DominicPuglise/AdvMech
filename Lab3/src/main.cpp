@@ -5,7 +5,6 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
 #include <SparkFun_Qwiic_OLED.h>
-#define SEALEVELPRESSURE_HPA (1013.25)
 
 Adafruit_BME280 bme;
 
@@ -100,7 +99,7 @@ void loop(){
 
 
 
-    
+
     char myNewText[50];
     if (currentState == DisplayTemps) {
         sprintf(myNewText, "Tc: %.1f ", temp );
@@ -109,6 +108,8 @@ void loop(){
         sprintf(myNewText, "Ttar: %.1f", targetTemperature);
         myOLED.text(3, yoffset + 12, myNewText);
         myOLED.display();
+
+
     } else if (currentState == SetTemp) {
         if (digitalRead(pinUp) && !prevUp) {
             targetTemperature++;
@@ -116,6 +117,8 @@ void loop(){
         if (digitalRead(pinDown) && !prevDown) {
             targetTemperature--;
         }
+
+        
         prevUp = digitalRead(pinUp);
         prevDown = digitalRead(pinDown);
         sprintf(myNewText, "Ttar: %.1f", targetTemperature);
