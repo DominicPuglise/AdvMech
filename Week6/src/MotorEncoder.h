@@ -15,11 +15,12 @@ class MotorEncoder {
         int pulseCount;
         bool prevState;
         int dir;
+        int pin_LimitSwitch;
 
     public:
-        MotorEncoder(int mInput, int mOutput, int pCW, int pCCW, int pE) :
+        MotorEncoder(int mInput, int mOutput, int pCW, int pCCW, int pE, int sw) :
         modInput(mInput), modOutput(mOutput), pinCW(pCW), pinCCW(pCCW), pinEncoder(pE), 
-        pulseCount(0), prevState(LOW), dir(1) {;}
+        pulseCount(0), prevState(LOW), dir(1), pin_LimitSwitch(sw) {;}
 
         void begin() {
             //instance = this;
@@ -42,6 +43,17 @@ class MotorEncoder {
             P1.writeDiscrete(LOW, modOutput, pinCCW);
         }
 
+        void Home(){
+            
+            while(!P1.readDiscrete(modInput, pin_LimitSwitch)){
+                MoveCCW();
+                Serial.println("Homing");
+                delay(10);
+            }
+            Stop();
+            ZeroPulse();
+        }
+
 
         void UpdatePulse(){
             bool currentState = P1.readDiscrete(modInput, pinEncoder);
@@ -56,23 +68,32 @@ class MotorEncoder {
 
 
         bool MoveTo(int targetPos) {
+            UpdatePulse();
+            Serial.print("Current Pos: ");
+            Serial.println(pulseCount);
             if (pulseCount < targetPos) {
-                MoveCW();
+                MoveCCW();
                 return false;
             }
             else if (pulseCount > targetPos) {
-                MoveCCW();
+                MoveCW();
                 return false;
             }
             else {
                 Stop();
                 return true;
-        }
+            }
+            return false;
         }
 
         void ZeroPulse(){
             pulseCount = 0;
         }
+
+        int GetPulse(){
+            return pulseCount;
+        }
+
 
 
 };
