@@ -1,5 +1,3 @@
-// (Parts of this code were sourced from Matthew, as we worked on this together in the lab)
-
 #include <Arduino.h>
 #include <P1AM.h>
 
@@ -56,6 +54,7 @@ bool getPulseKey(){
 bool inputTriggered() {
   return !P1.readDiscrete(modInput, lbIn);
 }
+
 bool outputTriggered() {
   return !P1.readDiscrete(modInput, lbOut);
 }
@@ -65,8 +64,6 @@ void toggleConveyor(bool state) {
 int readColor() {
   return P1.readAnalog(modAnalog, color);
 }
-
-
 void triggerEjector(String color) {
   int ejector = 0;
   if (color == "White") {
@@ -87,6 +84,31 @@ void triggerEjector(String color) {
 
 
 void loop() {
+
+  if(!P1.readDiscrete(modInput, 4)){
+    P1.writeDiscrete(HIGH, modOutput, 6);
+    Serial.println("White waiting");
+  }else{
+    P1.writeDiscrete(LOW, modOutput, 6);
+  }
+
+  if(!P1.readDiscrete(modInput, 5)){
+    P1.writeDiscrete(HIGH, modOutput, 7);
+    Serial.println("Red waiting");
+  }else{
+    P1.writeDiscrete(LOW, modOutput, 7);
+  }
+
+  if(!P1.readDiscrete(modInput, 6)){
+    P1.writeDiscrete(HIGH, modOutput, 8);
+    Serial.println("Blue waiting");
+  }else{
+    P1.writeDiscrete(LOW, modOutput, 8);
+  }
+
+
+
+
   switch (currentState) {
     case Waiting:
       if (inputTriggered()) {
@@ -98,7 +120,6 @@ void loop() {
 
     case ColorSensing:
       colorValue = min(readColor(), colorValue);
-      Serial.println(colorValue);
 
       if (outputTriggered()) {
         currentState = CountedMove;
@@ -113,7 +134,7 @@ void loop() {
 
 
         } else {
-          moveSteps = 15;
+          moveSteps = 13;
           eject = "Blue";
         }
         P1.writeDiscrete(true, modOutput, compressor);

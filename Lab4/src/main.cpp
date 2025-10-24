@@ -140,8 +140,6 @@ void loop() {
 
     if(currentPress != NONE)
     currentPress = NONE;
-
-  
   }
   
 }

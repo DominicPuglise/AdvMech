@@ -62,11 +62,14 @@ public:
             MoveCcw(); 
         }
         Stop();
+        delay(100);
         ZeroPulse();
     }
 
     bool MoveTo(int targetPos) {
         UpdatePulse();
+        //Serial.print("Pulse Count: ");
+        //Serial.println(pulseCount);
         if (pulseCount < targetPos ) {
             MoveCw();
         } else if (pulseCount > targetPos ) {
