@@ -4,7 +4,7 @@
 
 
 
-// was not able to get clock to reliably set to the correct time primarily due to inaccuracies in homing 
+// was not able to get clock to reliably set to the correct time primarily due to inaccuracies in step increments and homing 
 
 
 const char* ssid     = "NSA Security Van HW";
